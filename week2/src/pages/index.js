@@ -83,6 +83,80 @@ class CreateNewData extends React.Component {
   }
 }
 
+class EditData extends React.Component {
+  state = { 
+    visible: false,
+    productName: null,
+    createTime: null,
+    personInCharge: null,
+    productIntro: null,
+   };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleEditConfirm = () => {
+    console.log('handleCreateConfirm state', this.props);
+    let editedItem = {
+        productId: this.props.id,
+        productName: this.state.productName,
+        personInCharge: this.state.personInCharge,
+        productIntro: this.state.productIntro,
+        createTime: this.state.createTime,
+    }
+
+    this.props.dispatch({
+      type: 'dataset/editItem',
+      payload: editedItem
+    });
+
+    this.setState({
+      visible: false,
+    });
+  }
+
+  render() {
+    return (
+      <>
+        <Button type="primary" onClick={this.showModal}>
+          Edit
+        </Button>
+        <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onOk={this.handleEditConfirm}
+          onCancel={this.handleCancel}
+        >
+          <Form>
+            <Form.Item label="productName" name="productName">
+              <Input onChange = {(e) => this.setState({productName: e.target.value})}/>
+            </Form.Item>
+            <Form.Item label="createTime" name="createTime">
+              <Input onChange = {(e) => this.setState({createTime: e.target.value})}/>
+            </Form.Item>
+            <Form.Item label="personInCharge" name="personInCharge">
+              <Input onChange = {(e) => this.setState({personInCharge: e.target.value})}/>
+            </Form.Item>
+            <Form.Item label="productIntro" name="productIntro">
+              <Input onChange = {(e) => this.setState({productIntro : e.target.value})}/>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </>
+    );
+  }
+}
+
 class Search extends React.Component {
   constructor(props){
     super(props);
@@ -183,8 +257,9 @@ function Display(props) {
       title: 'Operation',
       key: 'operation',
       render: (text, record) => (
+        
         <span>
-          <Button> Edit </Button>
+          <EditData dataSource ={props.dataSource} dispatch = {props.dispatch} id = {record.productId}/>
           <Button onClick={() => handleDelete(record.productId)}> Delete </Button>
         </span>
       ),

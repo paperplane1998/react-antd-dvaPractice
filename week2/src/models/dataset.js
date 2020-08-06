@@ -9,7 +9,7 @@ var products = [
   },
   {
     key: 2,
-    productId: 3,
+    productId: 2,
     productName: 'chair',
     personInCharge: 'liu',
     productIntro: 'a little table',
@@ -48,7 +48,24 @@ export default {
       },
   
       editItem(state, {payload: editedItem}){
-        
+        console.log('editedItem', editedItem);
+        let key = state.products.filter(item => item.productId == editedItem.productId)[0].key;
+        console.log('key', state.products[key])
+        let item = state.products[key-1];
+        if(editedItem.productName != null){
+          item.productName = editedItem.productName;
+        }
+        if(editedItem.personInCharge != null){
+          item.personInCharge = editedItem.personInCharge;
+        }
+        if(editedItem.createTime != null){
+          item.createTime = editedItem.CreateTime;
+        }
+        if(editedItem.productIntro != null){
+          item.productIntro = editedItem.productIntro;
+        }
+        let newshowItems = state.products.concat()
+        return Object.assign({}, state, {showItems: newshowItems});
       },
 
       searchItem(state, { payload: keywords}){
